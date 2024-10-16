@@ -402,7 +402,7 @@
   }
 
   .underline-links-hover:hover a {
-    text-decoration: underline;
+    /* text-decoration: underline; */
     text-underline-offset: 0.3rem;
   }
 }
@@ -592,4 +592,24 @@
   .grid__item:nth-child(8n) .product-card-wrapper:hover .shape--blob {
     clip-path: polygon(var(--shape--blob-5));
   }
+}
+.card__information{
+  text-align: center;
+}
+.card__information h3 a{
+  font-weight: 600;
+}
+.card-information{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+.card__heading h5{
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.flizk-button{
+  width: fit-content;
+  margin: auto;
 }

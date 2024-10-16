@@ -1,0 +1,185 @@
+<div class="two-products-section">
+  <h2>{{ section.settings.title }}</h2>
+  <div class="two-products-wrapper" style="display: flex; justify-content: space-between;">
+    {% assign product_width = '100%' %}
+    {% if section.settings.image_width == 'half' %}
+      {% assign product_width = '48%' %}
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.settings.product %}
+        {% assign product = all_products[block.settings.product] %}
+        <div class="product" style="width: {{ product_width }};">
+          {% if section.settings.product_title == 'true' %}
+            <h3>{{ product.title }}</h3>
+          {% endif %}
+          <a href="{{ product.url }}">
+            <img
+              src="{{ product.featured_image | img_url: 'medium' }}"
+              alt="{{ product.title }}"
+              width="300"
+              height="300"
+            >
+          </a>
+          {% if section.settings.product_price == 'true' %}
+            <p>{{ product.price | money }}</p>
+          {% endif %}
+          {% if section.settings.product_navigate == 'true' %}
+            <a href="{{ product.url }}" class="btn">View Product</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{%- style -%}
+  .two-products-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .product {
+    /* border: 1px solid #e0e0e0; */
+    padding: 20px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+    box-sizing: border-box; /* Ensures padding and border are included in width */
+  }
+
+  .product img {
+    width: 100%;
+    height: auto;
+  }
+
+  .product h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .product p {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+  }
+
+  .product a.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007aff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .product a.btn:hover {
+    background-color: #005bb5;
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Two Products Section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Featured Products",
+      "label": "Section Title"
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "options": [
+        {
+          "value": "half",
+          "label": "Half Width"
+        },
+        {
+          "value": "full",
+          "label": "Full Width"
+        }
+      ],
+      "default": "half",
+      "label": "Image Width"
+    },
+    {
+      "type": "radio",
+      "id": "product_title",
+      "label": "Product Title",
+      "default": "true",
+      "options": [
+        {
+          "value": "true",
+          "label": "Show"
+        },
+        {
+          "value": "false",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "product_price",
+      "label": "Product Price",
+      "default": "true",
+      "options": [
+        {
+          "value": "true",
+          "label": "Show"
+        },
+        {
+          "value": "false",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "product_navigate",
+      "label": "Navigate",
+      "default": "true",
+      "options": [
+        {
+          "value": "true",
+          "label": "Show"
+        },
+        {
+          "value": "false",
+          "label": "Hide"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_1",
+      "name": "First Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        }
+      ]
+    },
+    {
+      "type": "product_2",
+      "name": "Second Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Products Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

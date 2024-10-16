@@ -231,3 +231,23 @@
     display: list-item;
   }
 }
+.flizk-group-quantity{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  column-gap: 10px;
+}
+.flizk-title h1{
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-style: normal;
+  text-align: center;
+}
+.price.flizk-price{
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0px;
+  text-align: center;
+}

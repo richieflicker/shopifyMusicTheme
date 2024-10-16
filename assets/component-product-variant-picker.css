@@ -150,3 +150,10 @@ variant-selects {
   }
 }
 /* End custom styles for Swatch display type */
+.flizkProduct-search{
+  margin: auto;
+}
+.flizkProduct-search .select__select{
+  min-height: 30px;
+  max-height: 30px;
+}

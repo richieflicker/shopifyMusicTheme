@@ -62,14 +62,15 @@ product-info {
 
 @media screen and (min-width: 990px) {
   .product--large:not(.product--no-media) .product__media-wrapper {
-    max-width: 65%;
-    width: calc(65% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: 50%;
+    width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2);
   }
 
   .product--large:not(.product--no-media) .product__info-wrapper {
     padding: 0 0 0 4rem;
-    max-width: 35%;
-    width: calc(35% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: 50%;
+    width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2);
+    border-left: 1px solid #333;
   }
 
   .product--large:not(.product--no-media).product--right .product__info-wrapper {
@@ -1491,4 +1492,29 @@ a.product__text {
   .recipient-form > input[type='checkbox']:checked + label .icon-checkmark {
     border: none;
   }
+}
+
+/* Gallery Styling Rework  */
+.flizkProduct{
+  display: grid;
+  padding: 0 30px;
+}
+.flizkProduct li{
+  width: 100%!important;
+  max-width: 100%!important;
+}
+.flizkProduct li:not(:last-child) .product-media-container.constrain-height.media-fit-contain.flizkProduct-container{
+  width: 100%;
+  border: unset;
+  border-bottom: 1px solid #333;
+}
+.product__info-container .flizk-group-quantity .product-form{
+  margin: unset;
+}
+.flizk-group-quantity .product-form__input{
+  flex: unset;
+  margin-bottom: unset;
+}
+.flizkProduct .product-form__input,.flizk-group-quantity .product-form__submit{
+  margin-bottom: 0;
 }
