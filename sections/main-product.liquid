@@ -697,7 +697,7 @@
       </div>
     </div>
 
-    {% render 'product-media-modal', variant_images: variant_images %}
+    {% comment %} {% render 'product-media-modal', variant_images: variant_images %} {% endcomment %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}
     {%- for block in popups -%}
@@ -909,7 +909,7 @@
               "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
             }
           ],
-          "default": "button",
+          "default": "dropdown",
           "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.label"
         },
         {

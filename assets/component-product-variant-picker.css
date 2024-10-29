@@ -157,3 +157,62 @@ variant-selects {
   min-height: 30px;
   max-height: 30px;
 }
+/* New Single styling  */
+.variant-info {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,.2);
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.d-flex, .group-varient__download {
+  display: flex;
+}
+.group-varient__price {
+  color: red;
+  margin-left: auto;
+}
+.group-varient__titledescription {
+  flex-basis: 100%;
+  font-size: 14px;
+  line-height: 1;
+}
+.product-form__buttons{
+  float: right;
+}
+
+.group-varient__download{
+  display:flex
+}
+.group-varient_radio{
+  position:relative
+}
+.group-varient_radio input[type='radio']{
+visibility: hidden;
+  position: absolute;
+}
+.group-varient_radio  label{
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 0.25em;
+  padding: 0.2em 0.8em;
+  text-align: center;
+  min-width: 2.5em;
+}
+.group-varient_radio input[type="radio"] + label::before {
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  content: "";
+  display: inline-block;
+  height: 12px;
+  margin-right: 0.25em;
+  margin-left: -0.25em;
+  width: 12px;
+}
+.group-varient_radio input[type="radio"]:checked  + label::before {
+background: #222;
+}

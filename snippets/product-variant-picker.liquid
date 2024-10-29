@@ -14,80 +14,201 @@
     data-section="{{ section.id }}"
     {{ block.shopify_attributes }}
   >
-    {%- for option in product.options_with_values -%}
-      {%- liquid
-        assign swatch_count = option.values | map: 'swatch' | compact | size
-        assign picker_type = block.settings.picker_type
+    {%- liquid
+      assign picker_type = block.settings.picker_type
+      if product.category == 'Uncategorized'
+        assign picker_type = 'flizk-category'
+      endif
+    -%}
 
-        if swatch_count > 0 and block.settings.swatch_shape != 'none'
-          if block.settings.picker_type == 'dropdown'
-            assign picker_type = 'swatch_dropdown'
-          else
-            assign picker_type = 'swatch'
-          endif
-        endif
-      -%}
-      {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
-          </legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- else -%}
-        <div class="product-form__input product-form__input--dropdown flizkProduct-search">
-          {% comment %}
-            <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
-              {{ option.name }}
-            </label>
-          {% endcomment %}
-          <div class="select">
-            {%- if picker_type == 'swatch_dropdown' -%}
-              <span
-                data-selected-value
-                class="dropdown-swatch"
-              >
-                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
-              </span>
-            {%- endif -%}
-            <select
-              id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="select__select"
-              name="options[{{ option.name | escape }}]"
-              form="{{ product_form_id }}"
-            >
-              {% render 'product-variant-options',
-                product: product,
-                option: option,
-                block: block,
-                picker_type: picker_type
-              %}
-            </select>
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
+    {%- if picker_type == 'flizk-category' -%}
+      <!-- Custom 'flizk-category' Code -->
+      <div class="single-product-add-to-cart-btns">
+        <!-- Non-Downloadable Variants -->
+        {% for variant in product.variants %}
+          {% unless variant.metafields.custom.downloads == true or variant.metafields.custom.single_track == true %}
+            <div class="variant-info">
+              <div class="group-varient__single">
+                <!-- Variant Details -->
+                <div class="d-flex df-sb flex-wrap">
+                  <span class="group-varient__title">
+                    {{ variant.title }}
+                    {% if variant.metafields.custom.titlevarient %}
+                      , {{ variant.metafields.custom.titlevarient }}
+                    {% endif %}
+                  </span>
+                  <span class="group-varient__price">{{ variant.price | money }}</span>
+                  {% if variant.metafields.custom.titledescription %}
+                    <span class="group-varient__titledescription">
+                      {{ variant.metafields.custom.titledescription }}
+                    </span>
+                  {% endif %}
+                </div>
+                <!-- Add to Cart Button -->
+                {% form 'product', product, variant: variant %}
+                  {%-
+                    render 'buy-buttons',
+                    block: block,
+                    product: product,
+                    product_form_id: 'product-form-' | append: variant.id,
+                    section_id: section.id,
+                    show_pickup_availability: true
+                  -%}
+                {% endform %}
+                {% if variant.metafields.import_information.trade_item_description %}
+                  <p class="group-varient__description">
+                    {{ variant.metafields.import_information.trade_item_description }}
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+
+      <!-- Downloadable Variants -->
+      {% assign has_downloadable_variants = false %}
+      {% for variant in product.variants %}
+        {% if variant.metafields.custom.downloads == true %}
+          {% assign has_downloadable_variants = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+      {% if has_downloadable_variants %}
+        <div class="downloadable-variants">
+          {{ product.id }}
+          <div class="single-field-label">{{ 'products.product.download' | t }}</div>
+          <div class="single-field-label">{{ 'products.product.select_format' | t }}</div>
+          <div class="variant-info">
+            <div class="group-varient__download">
+              {% for variant in product.variants %}
+                {% if variant.metafields.custom.downloads == true %}
+                  <div class="d-flex df-sb group-varient_radio">
+                    <input
+                      type="radio"
+                      name="variant_select"
+                      id="variant-{{ variant.id }}"
+                      value="{{ variant.id }}"
+                      data-variant-id="{{ variant.id }}"
+                      {% if variant.id == product.selected_or_first_available_variant.id %}
+                        checked
+                      {% endif %}
+                    >
+                    <label for="variant-{{ variant.id }}">
+                      <span class="group-varient__title">{{ variant.title }}</span>
+                      <span class="group-varient__price">{{ variant.price | money }}</span>
+                    </label>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
           </div>
+
+          <div class="group-varient__add-to-cart">
+            {% form 'product', product, id: 'product-form' %}
+              <!-- Hidden input to store the selected variant ID -->
+              <input
+                type="hidden"
+                name="id"
+                id="selected-variant-id"
+                value="{{ product.selected_or_first_available_variant.id }}"
+              >
+              {%- render 'buy-buttons',
+                block: block,
+                product: product,
+                product_form_id: 'product-form',
+                section_id: section.id,
+                show_pickup_availability: true
+              -%}
+            {% endform %}
+          </div>
+
+          <script>
+            document.querySelectorAll('input[name="variant_select"]').forEach(function (variantRadio) {
+              variantRadio.addEventListener('change', function () {
+                const selectedVariantId = this.value;
+                const hiddenInput = document.getElementById('selected-variant-id');
+                hiddenInput.value = selectedVariantId; // Update the hidden input value to the selected variant ID
+              });
+            });
+          </script>
         </div>
-      {%- endif -%}
-    {%- endfor -%}
+      {% endif %}
+    {%- else -%}
+      <div>{{ block.settings.picker_type }}</div>
+      <!-- Begin Loop Over Options -->
+      {%- for option in product.options_with_values -%}
+        {%- liquid
+          assign swatch_count = option.values | map: 'swatch' | compact | size
+
+          if swatch_count > 0 and block.settings.swatch_shape != 'none'
+            if block.settings.picker_type == 'dropdown'
+              assign picker_type = 'swatch_dropdown'
+            else
+              assign picker_type = 'swatch'
+            endif
+          else
+            assign picker_type = block.settings.picker_type
+          endif
+        -%}
+        {%- if picker_type == 'swatch' -%}
+          <fieldset class="js product-form__input product-form__input--swatch">
+            <legend class="form__label">
+              {{ option.name }}:
+              <span data-selected-value>
+                {{- option.selected_value -}}
+              </span>
+            </legend>
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- elsif picker_type == 'button' -%}
+          <fieldset class="js product-form__input product-form__input--pill">
+            <legend class="form__label">{{ option.name }}</legend>
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- else -%}
+          <div class="product-form__input product-form__input--dropdown flizkProduct-search">
+            <div class="select">
+              {%- if picker_type == 'swatch_dropdown' -%}
+                <span
+                  data-selected-value
+                  class="dropdown-swatch"
+                >
+                  {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+                </span>
+              {%- endif -%}
+              <select
+                id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                class="select__select"
+                name="options[{{ option.name | escape }}]"
+                form="{{ product_form_id }}"
+              >
+                {% render 'product-variant-options',
+                  product: product,
+                  option: option,
+                  block: block,
+                  picker_type: picker_type
+                %}
+              </select>
+              <span class="svg-wrapper">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
 
     <script type="application/json" data-selected-variant>
       {{ product.selected_or_first_available_variant | json }}
