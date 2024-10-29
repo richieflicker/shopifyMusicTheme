@@ -77,7 +77,6 @@
 
       {% if has_downloadable_variants %}
         <div class="downloadable-variants">
-          {{ product.id }}
           <div class="single-field-label">{{ 'products.product.download' | t }}</div>
           <div class="single-field-label">{{ 'products.product.select_format' | t }}</div>
           <div class="variant-info">
@@ -136,7 +135,7 @@
         </div>
       {% endif %}
     {%- else -%}
-      <div>{{ block.settings.picker_type }}</div>
+      {% comment %} <div>{{ block.settings.picker_type }}</div> {% endcomment %}
       <!-- Begin Loop Over Options -->
       {%- for option in product.options_with_values -%}
         {%- liquid
