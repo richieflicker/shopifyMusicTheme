@@ -43,13 +43,13 @@
         "product_1_b6V8nC": {
           "type": "product_1",
           "settings": {
-            "product": "ceo-tee-t-shirt"
+            "product": "ceo-tee-sample"
           }
         },
         "product_2_WnVam3": {
           "type": "product_2",
           "settings": {
-            "product": "ceo-tee-t-shirt"
+            "product": "ceo-tee-sample"
           }
         }
       },
