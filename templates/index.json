@@ -36,9 +36,38 @@
         "product_price": "false",
         "product_navigate": "false"
       }
+    },
+    "two_products_section_JWMi8k": {
+      "type": "two-products-section",
+      "blocks": {
+        "product_1_b6V8nC": {
+          "type": "product_1",
+          "settings": {
+            "product": "ceo-tee-t-shirt"
+          }
+        },
+        "product_2_WnVam3": {
+          "type": "product_2",
+          "settings": {
+            "product": "ceo-tee-t-shirt"
+          }
+        }
+      },
+      "block_order": [
+        "product_1_b6V8nC",
+        "product_2_WnVam3"
+      ],
+      "settings": {
+        "title": "",
+        "image_width": "half",
+        "product_title": "false",
+        "product_price": "false",
+        "product_navigate": "false"
+      }
     }
   },
   "order": [
-    "two_products_section_6zq6zc"
+    "two_products_section_6zq6zc",
+    "two_products_section_JWMi8k"
   ]
 }
